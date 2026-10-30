@@ -80,7 +80,112 @@ DATA_MATERI = [
 ]
 
 
-# Membuat jendela utama
+# Data kuis
+DATA_KUIS = [
+    {
+        "soal": "Apa yang dimaksud dengan Python?",
+        "pilihan": [
+            "Bahasa pemrograman",
+            "Sistem operasi",
+            "Perangkat keras",
+            "Aplikasi pengolah gambar"
+        ],
+        "jawaban": 0
+    },
+    {
+        "soal": "Siapa pengembang bahasa pemrograman Python?",
+        "pilihan": [
+            "Bill Gates",
+            "Guido van Rossum",
+            "Steve Jobs",
+            "Mark Zuckerberg"
+        ],
+        "jawaban": 1
+    },
+    {
+        "soal": "Perintah apa yang digunakan untuk menampilkan teks di Python?",
+        "pilihan": [
+            "input()",
+            "show()",
+            "print()",
+            "display()"
+        ],
+        "jawaban": 2
+    },
+    {
+        "soal": "Apa fungsi variabel dalam Python?",
+        "pilihan": [
+            "Menghapus program",
+            "Menyimpan data",
+            "Mematikan komputer",
+            "Menghapus file"
+        ],
+        "jawaban": 1
+    },
+    {
+        "soal": "Manakah contoh penulisan variabel yang benar?",
+        "pilihan": [
+            "2nama = 'Gio'",
+            "nama siswa = 'Gio'",
+            "nama = 'Gio'",
+            "nama-siswa = 'Gio'"
+        ],
+        "jawaban": 2
+    },
+    {
+        "soal": "Tipe data untuk bilangan bulat adalah ...",
+        "pilihan": [
+            "String",
+            "Float",
+            "Boolean",
+            "Integer"
+        ],
+        "jawaban": 3
+    },
+    {
+        "soal": "Tipe data untuk menyimpan teks adalah ...",
+        "pilihan": [
+            "String",
+            "Integer",
+            "Float",
+            "Boolean"
+        ],
+        "jawaban": 0
+    },
+    {
+        "soal": "Nilai True dan False termasuk tipe data ...",
+        "pilihan": [
+            "Integer",
+            "Boolean",
+            "String",
+            "Float"
+        ],
+        "jawaban": 1
+    },
+    {
+        "soal": "Operator yang digunakan untuk perkalian adalah ...",
+        "pilihan": [
+            "+",
+            "-",
+            "*",
+            "/"
+        ],
+        "jawaban": 2
+    },
+    {
+        "soal": "Berapakah hasil dari 10 + 5 dalam Python?",
+        "pilihan": [
+            "5",
+            "10",
+            "15",
+            "50"
+        ],
+        "jawaban": 2
+    }
+]
+
+
+# Membuat jendela utama aplikasi
 def buat_jendela_utama():
     jendela = tk.Tk()
     jendela.title(JUDUL_APLIKASI)
@@ -153,7 +258,6 @@ def buat_jendela_utama():
             pady=10
         )
         kotak_kode.pack(padx=25, pady=5)
-
         kotak_kode.insert("1.0", materi["contoh"])
         kotak_kode.configure(state="disabled")
 
@@ -194,14 +298,180 @@ def buat_jendela_utama():
             )
             tombol.pack(pady=6)
 
-    # Fungsi menu kuis
+    # Fungsi membuka kuis
     def buka_kuis():
-        messagebox.showinfo(
-            "Kuis",
-            "Menu kuis akan segera tersedia."
-        )
+        halaman_kuis = tk.Toplevel(jendela)
+        halaman_kuis.title("Kuis Pemrograman Python")
+        halaman_kuis.geometry("650x500")
+        halaman_kuis.configure(bg=WARNA_BACKGROUND)
 
-    # Fungsi menu tentang aplikasi
+        nomor_soal = 0
+        skor = 0
+        jawaban_pilihan = tk.IntVar(value=-1)
+
+        label_judul = tk.Label(
+            halaman_kuis,
+            text="KUIS PEMROGRAMAN DASAR PYTHON",
+            font=("Arial", 17, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        )
+        label_judul.pack(pady=20)
+
+        label_nomor = tk.Label(
+            halaman_kuis,
+            text="",
+            font=("Arial", 11, "bold"),
+            bg=WARNA_BACKGROUND
+        )
+        label_nomor.pack(pady=5)
+
+        label_soal = tk.Label(
+            halaman_kuis,
+            text="",
+            font=("Arial", 13, "bold"),
+            bg=WARNA_BACKGROUND,
+            wraplength=550
+        )
+        label_soal.pack(pady=20)
+
+        area_pilihan = tk.Frame(
+            halaman_kuis,
+            bg=WARNA_BACKGROUND
+        )
+        area_pilihan.pack(pady=10)
+
+        tombol_lanjut = tk.Button(
+            halaman_kuis,
+            text="SOAL BERIKUTNYA",
+            font=("Arial", 11, "bold"),
+            bg=WARNA_UTAMA,
+            fg="white",
+            width=22,
+            pady=9
+        )
+        tombol_lanjut.pack(pady=20)
+
+        def tampilkan_soal():
+            jawaban_pilihan.set(-1)
+
+            data = DATA_KUIS[nomor_soal]
+
+            label_nomor.config(
+                text=f"Soal {nomor_soal + 1} dari {len(DATA_KUIS)}"
+            )
+
+            label_soal.config(text=data["soal"])
+
+            for widget in area_pilihan.winfo_children():
+                widget.destroy()
+
+            for indeks, pilihan in enumerate(data["pilihan"]):
+                radio = tk.Radiobutton(
+                    area_pilihan,
+                    text=f"{chr(65 + indeks)}. {pilihan}",
+                    variable=jawaban_pilihan,
+                    value=indeks,
+                    font=("Arial", 11),
+                    bg=WARNA_BACKGROUND,
+                    anchor="w",
+                    width=45,
+                    padx=10,
+                    pady=8
+                )
+                radio.pack(anchor="w", pady=3)
+
+            if nomor_soal == len(DATA_KUIS) - 1:
+                tombol_lanjut.config(text="SELESAI")
+            else:
+                tombol_lanjut.config(text="SOAL BERIKUTNYA")
+
+        def lanjut_soal():
+            nonlocal nomor_soal, skor
+
+            pilihan = jawaban_pilihan.get()
+
+            if pilihan == -1:
+                messagebox.showwarning(
+                    "Peringatan",
+                    "Silakan pilih salah satu jawaban terlebih dahulu.",
+                    parent=halaman_kuis
+                )
+                return
+
+            jawaban_benar = DATA_KUIS[nomor_soal]["jawaban"]
+
+            if pilihan == jawaban_benar:
+                skor += 1
+
+            if nomor_soal < len(DATA_KUIS) - 1:
+                nomor_soal += 1
+                tampilkan_soal()
+            else:
+                tampilkan_hasil()
+
+        def tampilkan_hasil():
+            for widget in halaman_kuis.winfo_children():
+                widget.destroy()
+
+            nilai = skor * 10
+
+            label_hasil = tk.Label(
+                halaman_kuis,
+                text="HASIL KUIS",
+                font=("Arial", 22, "bold"),
+                bg=WARNA_BACKGROUND,
+                fg=WARNA_UTAMA
+            )
+            label_hasil.pack(pady=35)
+
+            label_skor = tk.Label(
+                halaman_kuis,
+                text=f"Jawaban benar: {skor} dari {len(DATA_KUIS)} soal",
+                font=("Arial", 14),
+                bg=WARNA_BACKGROUND
+            )
+            label_skor.pack(pady=10)
+
+            label_nilai = tk.Label(
+                halaman_kuis,
+                text=f"Nilai Akhir: {nilai}",
+                font=("Arial", 20, "bold"),
+                bg=WARNA_BACKGROUND,
+                fg=WARNA_UTAMA
+            )
+            label_nilai.pack(pady=15)
+
+            if nilai >= 70:
+                pesan = "Bagus! Kamu sudah memahami materi Python."
+            else:
+                pesan = "Tetap semangat! Pelajari kembali materi Python."
+
+            label_pesan = tk.Label(
+                halaman_kuis,
+                text=pesan,
+                font=("Arial", 11),
+                bg=WARNA_BACKGROUND,
+                wraplength=500
+            )
+            label_pesan.pack(pady=10)
+
+            tombol_tutup = tk.Button(
+                halaman_kuis,
+                text="TUTUP KUIS",
+                font=("Arial", 11, "bold"),
+                bg=WARNA_UTAMA,
+                fg="white",
+                width=20,
+                pady=9,
+                command=halaman_kuis.destroy
+            )
+            tombol_tutup.pack(pady=25)
+
+        tombol_lanjut.config(command=lanjut_soal)
+        tampilkan_soal()
+
+    # Fungsi tentang aplikasi
     def buka_tentang():
         messagebox.showinfo(
             "Tentang Aplikasi",
