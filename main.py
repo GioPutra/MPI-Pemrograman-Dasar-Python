@@ -34,19 +34,59 @@ def buat_jendela_utama():
     )
     deskripsi.pack(pady=(0, 25))
 
-    # Fungsi menu
+    # Fungsi menu materi
     def buka_materi():
-        messagebox.showinfo(
-            "Materi Pembelajaran",
-            "Menu materi pembelajaran akan segera tersedia."
-        )
+        halaman_materi = tk.Toplevel(jendela)
+        halaman_materi.title("Materi Pembelajaran")
+        halaman_materi.geometry("600x450")
+        halaman_materi.configure(bg=WARNA_BACKGROUND)
 
+        judul_materi = tk.Label(
+            halaman_materi,
+            text="MATERI PEMBELAJARAN PYTHON",
+            font=("Arial", 18, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        )
+        judul_materi.pack(pady=30)
+
+        deskripsi_materi = tk.Label(
+            halaman_materi,
+            text="Pilih materi yang ingin kamu pelajari:",
+            font=("Arial", 11),
+            bg=WARNA_BACKGROUND
+        )
+        deskripsi_materi.pack(pady=10)
+
+        # Daftar materi
+        daftar_materi = [
+            "1. Pengenalan Python",
+            "2. Variabel dalam Python",
+            "3. Tipe Data Python",
+            "4. Operator Dasar Python"
+        ]
+
+        # Menampilkan daftar materi
+        for materi in daftar_materi:
+            label_materi = tk.Label(
+                halaman_materi,
+                text=materi,
+                font=("Arial", 12),
+                bg="white",
+                fg=WARNA_UTAMA,
+                width=35,
+                pady=10
+            )
+            label_materi.pack(pady=6)
+
+    # Fungsi menu kuis
     def buka_kuis():
         messagebox.showinfo(
             "Kuis",
             "Menu kuis akan segera tersedia."
         )
 
+    # Fungsi menu tentang aplikasi
     def buka_tentang():
         messagebox.showinfo(
             "Tentang Aplikasi",
@@ -54,6 +94,7 @@ def buat_jendela_utama():
             "pembelajaran interaktif untuk mempelajari dasar Python."
         )
 
+    # Fungsi keluar aplikasi
     def keluar_aplikasi():
         konfirmasi = messagebox.askyesno(
             "Keluar",
