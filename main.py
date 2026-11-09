@@ -3,6 +3,7 @@ from tkinter import messagebox
 import random
 import json
 import os
+from datetime import datetime
 # Konfigurasi aplikasi
 JUDUL_APLIKASI = "MPI Pemrograman Dasar Python"
 WARNA_BACKGROUND = "#f0f4f8"
