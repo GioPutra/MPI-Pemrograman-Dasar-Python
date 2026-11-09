@@ -9,7 +9,11 @@ JUDUL_APLIKASI = "MPI Pemrograman Dasar Python"
 WARNA_BACKGROUND = "#f0f4f8"
 WARNA_UTAMA = "#17365D"
 JUMLAH_SOAL_KUIS = 10
-
+# Lokasi file untuk menyimpan riwayat nilai
+FILE_RIWAYAT_NILAI = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "riwayat_nilai.json"
+)
 # Data materi pembelajaran
 DATA_MATERI = [
     {
