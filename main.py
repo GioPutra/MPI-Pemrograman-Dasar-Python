@@ -14,6 +14,29 @@ FILE_RIWAYAT_NILAI = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "riwayat_nilai.json"
 )
+# Fungsi untuk menyimpan riwayat nilai kuis
+def simpan_riwayat_nilai(tingkat, skor, nilai):
+    riwayat = []
+
+    if os.path.exists(FILE_RIWAYAT_NILAI):
+        try:
+            with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
+                riwayat = json.load(file)
+        except (json.JSONDecodeError, OSError):
+            riwayat = []
+
+    data_nilai = {
+        "tanggal": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+        "tingkat": tingkat,
+        "skor": skor,
+        "total_soal": JUMLAH_SOAL_KUIS,
+        "nilai": nilai
+    }
+
+    riwayat.append(data_nilai)
+
+    with open(FILE_RIWAYAT_NILAI, "w", encoding="utf-8") as file:
+        json.dump(riwayat, file, indent=4, ensure_ascii=False)
 # Data materi pembelajaran
 DATA_MATERI = [
     {
@@ -410,7 +433,7 @@ def buat_jendela_utama():
                 widget.destroy()
 
             nilai = int((skor / JUMLAH_SOAL_KUIS) * 100)
-
+            simpan_riwayat_nilai(tingkat, skor, nilai)
             tk.Label(
                 halaman_kuis, text="HASIL KUIS",
                 font=("Arial", 22, "bold"), bg=WARNA_BACKGROUND,
@@ -509,7 +532,64 @@ def buat_jendela_utama():
             "MPI Pemrograman Dasar Python adalah aplikasi "
             "pembelajaran interaktif untuk mempelajari dasar Python."
         )
+    # Fungsi untuk menampilkan riwayat nilai kuis
+    def buka_riwayat_nilai():
+        if not os.path.exists(FILE_RIWAYAT_NILAI):
+            messagebox.showinfo(
+                "Riwayat Nilai",
+                "Belum ada riwayat nilai kuis."
+            )
+            return
 
+        try:
+            with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
+                riwayat = json.load(file)
+        except (json.JSONDecodeError, OSError):
+            messagebox.showerror(
+                "Kesalahan",
+                "Riwayat nilai tidak dapat dibaca."
+            )
+            return
+
+        jendela_riwayat = tk.Toplevel(jendela)
+        jendela_riwayat.title("Riwayat Nilai Kuis")
+        jendela_riwayat.geometry("550x450")
+        jendela_riwayat.configure(bg=WARNA_BACKGROUND)
+
+        tk.Label(
+            jendela_riwayat,
+            text="RIWAYAT NILAI KUIS",
+            font=("Arial", 16, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(pady=12)
+
+        area_riwayat = tk.Text(
+            jendela_riwayat,
+            font=("Arial", 10),
+            width=60,
+            height=20
+        )
+        area_riwayat.pack(padx=15, pady=10)
+
+        if not riwayat:
+            area_riwayat.insert(
+                tk.END, "Belum ada riwayat nilai kuis."
+            )
+        else:
+            for nomor, data in enumerate(riwayat, start=1):
+                area_riwayat.insert(
+                    tk.END,
+                    f"Riwayat ke-{nomor}\n"
+                    f"Tanggal: {data.get('tanggal', '-')}\n"
+                    f"Tingkat: {data.get('tingkat', '-')}\n"
+                    f"Jawaban benar: {data.get('skor', 0)} "
+                    f"dari {data.get('total_soal', 0)} soal\n"
+                    f"Nilai akhir: {data.get('nilai', 0)}\n"
+                    f"{'-' * 40}\n"
+                )
+
+        area_riwayat.config(state="disabled")
     def keluar_aplikasi():
         konfirmasi = messagebox.askyesno(
             "Keluar", "Apakah kamu yakin ingin keluar dari aplikasi?"
@@ -521,6 +601,7 @@ def buat_jendela_utama():
         ("MATERI PEMBELAJARAN", buka_materi),
         ("KUIS", buka_kuis),
         ("TENTANG APLIKASI", buka_tentang),
+        ("RIWAYAT NILAI", buka_riwayat_nilai),
         ("KELUAR", keluar_aplikasi)
     ]
 
