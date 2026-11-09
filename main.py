@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 import random
-
+import json
+import os
 # Konfigurasi aplikasi
 JUDUL_APLIKASI = "MPI Pemrograman Dasar Python"
 WARNA_BACKGROUND = "#f0f4f8"
