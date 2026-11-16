@@ -660,6 +660,7 @@ def buat_jendela_utama():
         ("KUIS", buka_kuis),
         ("TENTANG APLIKASI", buka_tentang),
         ("RIWAYAT NILAI", buka_riwayat_nilai),
+        ("STATISTIK NILAI", buka_statistik_nilai),
         ("KELUAR", keluar_aplikasi)
     ]
 
