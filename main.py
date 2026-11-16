@@ -589,7 +589,65 @@ def buat_jendela_utama():
                     f"{'-' * 40}\n"
                 )
 
-        area_riwayat.config(state="disabled")
+    def buka_statistik_nilai():
+        if not os.path.exists(FILE_RIWAYAT_NILAI):
+            messagebox.showinfo(
+                "Statistik Nilai",
+                "Belum ada riwayat nilai kuis untuk dihitung."
+            )
+            return
+
+        try:
+            with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
+                riwayat = json.load(file)
+        except (json.JSONDecodeError, OSError):
+            messagebox.showerror(
+                "Statistik Nilai",
+                "Data riwayat nilai tidak dapat dibaca."
+            )
+            return
+
+        if not riwayat:
+            messagebox.showinfo(
+                "Statistik Nilai",
+                "Belum ada riwayat nilai kuis untuk dihitung."
+            )
+            return
+
+        jumlah_percobaan = len(riwayat)
+        daftar_nilai = [data["nilai"] for data in riwayat]
+        nilai_tertinggi = max(daftar_nilai)
+        rata_rata = sum(daftar_nilai) / jumlah_percobaan
+        total_jawaban_benar = sum(data["skor"] for data in riwayat)
+
+        jendela_statistik = tk.Toplevel(jendela)
+        jendela_statistik.title("Statistik Nilai Kuis")
+        jendela_statistik.geometry("450x350")
+        jendela_statistik.configure(bg=WARNA_BACKGROUND)
+
+        tk.Label(
+            jendela_statistik,
+            text="STATISTIK NILAI KUIS",
+            font=("Arial", 16, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(pady=20)
+
+        informasi = [
+            f"Total percobaan kuis: {jumlah_percobaan}",
+            f"Nilai tertinggi: {nilai_tertinggi}",
+            f"Rata-rata nilai: {rata_rata:.2f}",
+            f"Total jawaban benar: {total_jawaban_benar}"
+        ]
+
+        for teks in informasi:
+            tk.Label(
+                jendela_statistik,
+                text=teks,
+                font=("Arial", 12),
+                bg=WARNA_BACKGROUND
+            ).pack(pady=10)
+
     def keluar_aplikasi():
         konfirmasi = messagebox.askyesno(
             "Keluar", "Apakah kamu yakin ingin keluar dari aplikasi?"
