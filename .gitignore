@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# File cadangan dan data riwayat nilai lokal
+main_backup_sebelum_fitur_pembahasan.py
+riwayat_nilai.json
