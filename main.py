@@ -619,7 +619,18 @@ def buat_jendela_utama():
         nilai_tertinggi = max(daftar_nilai)
         rata_rata = sum(daftar_nilai) / jumlah_percobaan
         total_jawaban_benar = sum(data["skor"] for data in riwayat)
-
+        jumlah_mudah = sum(1 for data in riwayat if data["tingkat"] == "Mudah")
+        jumlah_menengah = sum(1 for data in riwayat if data["tingkat"] == "Menengah")
+        jumlah_sulit = sum(1 for data in riwayat if data["tingkat"] == "Sulit")
+        informasi = [
+            f"Total percobaan kuis: {jumlah_percobaan}",
+            f"Nilai tertinggi: {nilai_tertinggi}",
+            f"Rata-rata nilai: {rata_rata:.2f}",
+            f"Total jawaban benar: {total_jawaban_benar}",
+            f"Percobaan tingkat Mudah: {jumlah_mudah}",
+            f"Percobaan tingkat Menengah: {jumlah_menengah}",
+            f"Percobaan tingkat Sulit: {jumlah_sulit}"
+        ]
         jendela_statistik = tk.Toplevel(jendela)
         jendela_statistik.title("Statistik Nilai Kuis")
         jendela_statistik.geometry("450x350")
@@ -632,13 +643,6 @@ def buat_jendela_utama():
             bg=WARNA_BACKGROUND,
             fg=WARNA_UTAMA
         ).pack(pady=20)
-
-        informasi = [
-            f"Total percobaan kuis: {jumlah_percobaan}",
-            f"Nilai tertinggi: {nilai_tertinggi}",
-            f"Rata-rata nilai: {rata_rata:.2f}",
-            f"Total jawaban benar: {total_jawaban_benar}"
-        ]
 
         for teks in informasi:
             tk.Label(
