@@ -652,6 +652,126 @@ def buat_jendela_utama():
                 bg=WARNA_BACKGROUND
             ).pack(pady=10)
 
+    # Fungsi untuk menampilkan grafik perkembangan nilai
+    def buka_grafik_nilai():
+        if not os.path.exists(FILE_RIWAYAT_NILAI):
+            messagebox.showinfo(
+                "Grafik Nilai",
+                "Belum ada riwayat nilai kuis."
+            )
+            return
+
+        try:
+            with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
+                riwayat = json.load(file)
+        except (json.JSONDecodeError, OSError):
+            messagebox.showerror(
+                "Grafik Nilai",
+                "Data riwayat nilai tidak dapat dibaca."
+            )
+            return
+
+        if not riwayat:
+            messagebox.showinfo(
+                "Grafik Nilai",
+                "Belum ada nilai untuk ditampilkan."
+            )
+            return
+
+        daftar_nilai = [data.get("nilai", 0) for data in riwayat]
+
+        halaman_grafik = tk.Toplevel(jendela)
+        halaman_grafik.title("Grafik Perkembangan Nilai")
+        halaman_grafik.geometry("700x500")
+        halaman_grafik.configure(bg=WARNA_BACKGROUND)
+
+        tk.Label(
+            halaman_grafik,
+            text="GRAFIK PERKEMBANGAN NILAI KUIS",
+            font=("Arial", 16, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(pady=15)
+
+        kanvas = tk.Canvas(
+            halaman_grafik,
+            width=640,
+            height=370,
+            bg="white",
+            highlightthickness=0
+        )
+        kanvas.pack(padx=20, pady=10)
+
+        kiri = 60
+        kanan = 610
+        atas = 25
+        bawah = 310
+
+        # Membuat sumbu grafik
+        kanvas.create_line(kiri, atas, kiri, bawah, width=2)
+        kanvas.create_line(kiri, bawah, kanan, bawah, width=2)
+
+        # Membuat garis skala nilai
+        for nilai in range(0, 101, 20):
+            y = bawah - (nilai / 100) * (bawah - atas)
+            kanvas.create_line(
+                kiri, y, kanan, y,
+                fill="#d1d5db",
+                dash=(3, 3)
+            )
+            kanvas.create_text(
+                kiri - 25, y,
+                text=str(nilai),
+                font=("Arial", 9)
+            )
+
+        # Menghitung posisi setiap nilai
+        jumlah_nilai = len(daftar_nilai)
+        titik = []
+
+        for indeks, nilai in enumerate(daftar_nilai):
+            if jumlah_nilai == 1:
+                x = (kiri + kanan) / 2
+            else:
+                x = kiri + indeks * (kanan - kiri) / (jumlah_nilai - 1)
+
+            y = bawah - (nilai / 100) * (bawah - atas)
+            titik.append((x, y))
+
+            kanvas.create_text(
+                x, bawah + 18,
+                text=str(indeks + 1),
+                font=("Arial", 9)
+            )
+
+        # Menghubungkan titik-titik nilai
+        for indeks in range(len(titik) - 1):
+            kanvas.create_line(
+                titik[indeks][0], titik[indeks][1],
+                titik[indeks + 1][0], titik[indeks + 1][1],
+                fill=WARNA_UTAMA,
+                width=3
+            )
+
+        # Menampilkan titik dan nilai
+        for indeks, (x, y) in enumerate(titik):
+            kanvas.create_oval(
+                x - 5, y - 5, x + 5, y + 5,
+                fill="#2563eb",
+                outline=""
+            )
+            kanvas.create_text(
+                x, y - 15,
+                text=str(daftar_nilai[indeks]),
+                font=("Arial", 9, "bold")
+            )
+
+        kanvas.create_text(
+            (kiri + kanan) / 2, 350,
+            text="Percobaan Kuis",
+            font=("Arial", 10)
+        )
+
     def keluar_aplikasi():
         konfirmasi = messagebox.askyesno(
             "Keluar", "Apakah kamu yakin ingin keluar dari aplikasi?"
