@@ -785,6 +785,7 @@ def buat_jendela_utama():
         ("TENTANG APLIKASI", buka_tentang),
         ("RIWAYAT NILAI", buka_riwayat_nilai),
         ("STATISTIK NILAI", buka_statistik_nilai),
+        ("GRAFIK PERKEMBANGAN NILAI", buka_grafik_nilai),
         ("KELUAR", keluar_aplikasi)
     ]
 
