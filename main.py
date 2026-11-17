@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import filedialog
 import random
 import json
 import os
+import csv
 from datetime import datetime
 # Konfigurasi aplikasi
 JUDUL_APLIKASI = "MPI Pemrograman Dasar Python"
@@ -648,6 +650,68 @@ def buat_jendela_utama():
                     justify="left",
                     anchor="w"
                 ).pack(fill="x", padx=10, pady=5, anchor="w")
+
+        def ekspor_riwayat_csv():
+            if not riwayat:
+                messagebox.showinfo(
+                    "Informasi",
+                    "Belum ada riwayat nilai yang dapat diekspor.",
+                    parent=jendela_riwayat
+                )
+                return
+
+            lokasi_file = filedialog.asksaveasfilename(
+                parent=jendela_riwayat,
+                title="Simpan Hasil Kuis",
+                defaultextension=".csv",
+                initialfile="riwayat_nilai.csv",
+                filetypes=[("File CSV", "*.csv")]
+            )
+
+            if not lokasi_file:
+                return
+
+            try:
+                with open(
+                    lokasi_file,
+                    "w",
+                    newline="",
+                    encoding="utf-8-sig"
+                ) as file:
+                    penulis = csv.writer(file)
+
+                    penulis.writerow([
+                        "No",
+                        "Tanggal",
+                        "Tingkat Kesulitan",
+                        "Jawaban Benar",
+                        "Total Soal",
+                        "Nilai Akhir"
+                    ])
+
+                    for nomor, data in enumerate(riwayat, start=1):
+                        penulis.writerow([
+                            nomor,
+                            data.get("tanggal", "-"),
+                            data.get("tingkat", "-"),
+                            data.get("skor", 0),
+                            data.get("total_soal", 0),
+                            data.get("nilai", 0)
+                        ])
+
+            except OSError:
+                messagebox.showerror(
+                    "Kesalahan",
+                    "File CSV gagal disimpan.",
+                    parent=jendela_riwayat
+                )
+                return
+
+            messagebox.showinfo(
+                "Berhasil",
+                f"Riwayat nilai berhasil diekspor ke:\n{lokasi_file}",
+                parent=jendela_riwayat
+            )
 
         def hapus_riwayat_terpilih():
             indeks_dihapus = [
