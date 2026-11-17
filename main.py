@@ -533,27 +533,25 @@ def buat_jendela_utama():
             "pembelajaran interaktif untuk mempelajari dasar Python."
         )
     # Fungsi untuk menampilkan riwayat nilai kuis
+    
+    # Fungsi untuk menampilkan dan menghapus riwayat nilai kuis
     def buka_riwayat_nilai():
-        if not os.path.exists(FILE_RIWAYAT_NILAI):
-            messagebox.showinfo(
-                "Riwayat Nilai",
-                "Belum ada riwayat nilai kuis."
-            )
-            return
-
-        try:
-            with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
-                riwayat = json.load(file)
-        except (json.JSONDecodeError, OSError):
-            messagebox.showerror(
-                "Kesalahan",
-                "Riwayat nilai tidak dapat dibaca."
-            )
-            return
+        if os.path.exists(FILE_RIWAYAT_NILAI):
+            try:
+                with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
+                    riwayat = json.load(file)
+            except (json.JSONDecodeError, OSError):
+                messagebox.showerror(
+                    "Kesalahan",
+                    "Riwayat nilai tidak dapat dibaca."
+                )
+                return
+        else:
+            riwayat = []
 
         jendela_riwayat = tk.Toplevel(jendela)
         jendela_riwayat.title("Riwayat Nilai Kuis")
-        jendela_riwayat.geometry("550x450")
+        jendela_riwayat.geometry("650x550")
         jendela_riwayat.configure(bg=WARNA_BACKGROUND)
 
         tk.Label(
@@ -564,30 +562,216 @@ def buat_jendela_utama():
             fg=WARNA_UTAMA
         ).pack(pady=12)
 
-        area_riwayat = tk.Text(
+        tk.Label(
             jendela_riwayat,
+            text="Pilih riwayat yang ingin dihapus.",
             font=("Arial", 10),
-            width=60,
-            height=20
-        )
-        area_riwayat.pack(padx=15, pady=10)
+            bg=WARNA_BACKGROUND
+        ).pack(pady=5)
 
-        if not riwayat:
-            area_riwayat.insert(
-                tk.END, "Belum ada riwayat nilai kuis."
+        area_utama = tk.Frame(
+            jendela_riwayat,
+            bg=WARNA_BACKGROUND
+        )
+        area_utama.pack(fill="both", expand=True, padx=15, pady=10)
+
+        kanvas = tk.Canvas(
+            area_utama,
+            bg="white",
+            highlightthickness=0
+        )
+        kanvas.pack(side="left", fill="both", expand=True)
+
+        scrollbar = tk.Scrollbar(
+            area_utama,
+            orient="vertical",
+            command=kanvas.yview
+        )
+        scrollbar.pack(side="right", fill="y")
+
+        kanvas.configure(yscrollcommand=scrollbar.set)
+
+        daftar_frame = tk.Frame(
+            kanvas,
+            bg="white"
+        )
+        kanvas.create_window(
+            (0, 0),
+            window=daftar_frame,
+            anchor="nw"
+        )
+
+        daftar_frame.bind(
+            "<Configure>",
+            lambda event: kanvas.configure(
+                scrollregion=kanvas.bbox("all")
             )
-        else:
+        )
+
+        pilihan_riwayat = []
+
+        def perbarui_tampilan():
+            for widget in daftar_frame.winfo_children():
+                widget.destroy()
+
+            pilihan_riwayat.clear()
+
+            if not riwayat:
+                tk.Label(
+                    daftar_frame,
+                    text="Belum ada riwayat nilai kuis.",
+                    font=("Arial", 11),
+                    bg="white"
+                ).pack(pady=20)
+                return
+
             for nomor, data in enumerate(riwayat, start=1):
-                area_riwayat.insert(
-                    tk.END,
+                variabel = tk.BooleanVar(value=False)
+                pilihan_riwayat.append(variabel)
+
+                teks_riwayat = (
                     f"Riwayat ke-{nomor}\n"
                     f"Tanggal: {data.get('tanggal', '-')}\n"
                     f"Tingkat: {data.get('tingkat', '-')}\n"
                     f"Jawaban benar: {data.get('skor', 0)} "
                     f"dari {data.get('total_soal', 0)} soal\n"
                     f"Nilai akhir: {data.get('nilai', 0)}\n"
-                    f"{'-' * 40}\n"
+                    f"{'-' * 40}"
                 )
+
+                tk.Checkbutton(
+                    daftar_frame,
+                    text=teks_riwayat,
+                    variable=variabel,
+                    font=("Arial", 10),
+                    bg="white",
+                    justify="left",
+                    anchor="w"
+                ).pack(fill="x", padx=10, pady=5, anchor="w")
+
+        def hapus_riwayat_terpilih():
+            indeks_dihapus = [
+                indeks
+                for indeks, variabel in enumerate(pilihan_riwayat)
+                if variabel.get()
+            ]
+
+            if not indeks_dihapus:
+                messagebox.showwarning(
+                    "Peringatan",
+                    "Pilih riwayat yang ingin dihapus.",
+                    parent=jendela_riwayat
+                )
+                return
+
+            konfirmasi = messagebox.askyesno(
+                "Konfirmasi",
+                f"Apakah kamu yakin ingin menghapus "
+                f"{len(indeks_dihapus)} riwayat terpilih?",
+                parent=jendela_riwayat
+            )
+
+            if not konfirmasi:
+                return
+
+            riwayat_baru = [
+                data
+                for indeks, data in enumerate(riwayat)
+                if indeks not in indeks_dihapus
+            ]
+
+            try:
+                with open(FILE_RIWAYAT_NILAI, "w", encoding="utf-8") as file:
+                    json.dump(
+                        riwayat_baru,
+                        file,
+                        indent=4,
+                        ensure_ascii=False
+                    )
+            except OSError:
+                messagebox.showerror(
+                    "Kesalahan",
+                    "Riwayat gagal dihapus.",
+                    parent=jendela_riwayat
+                )
+                return
+
+            riwayat.clear()
+            riwayat.extend(riwayat_baru)
+            perbarui_tampilan()
+
+            messagebox.showinfo(
+                "Berhasil",
+                "Riwayat yang dipilih berhasil dihapus.",
+                parent=jendela_riwayat
+            )
+
+        def hapus_semua_riwayat():
+            if not riwayat:
+                messagebox.showinfo(
+                    "Informasi",
+                    "Tidak ada riwayat yang dapat dihapus.",
+                    parent=jendela_riwayat
+                )
+                return
+
+            konfirmasi = messagebox.askyesno(
+                "Konfirmasi Hapus Semua",
+                "Apakah kamu yakin ingin menghapus SEMUA riwayat nilai?",
+                parent=jendela_riwayat
+            )
+
+            if not konfirmasi:
+                return
+
+            try:
+                with open(FILE_RIWAYAT_NILAI, "w", encoding="utf-8") as file:
+                    json.dump(
+                        [],
+                        file,
+                        indent=4,
+                        ensure_ascii=False
+                    )
+            except OSError:
+                messagebox.showerror(
+                    "Kesalahan",
+                    "Semua riwayat gagal dihapus.",
+                    parent=jendela_riwayat
+                )
+                return
+
+            riwayat.clear()
+            perbarui_tampilan()
+
+            messagebox.showinfo(
+                "Berhasil",
+                "Semua riwayat nilai berhasil dihapus.",
+                parent=jendela_riwayat
+            )
+
+        perbarui_tampilan()
+
+        tk.Button(
+            jendela_riwayat,
+            text="HAPUS RIWAYAT TERPILIH",
+            font=("Arial", 10, "bold"),
+            bg=WARNA_UTAMA,
+            fg="white",
+            width=30,
+            pady=8,
+            command=hapus_riwayat_terpilih
+        ).pack(pady=5)
+
+        tk.Button(
+            jendela_riwayat,
+            text="HAPUS SEMUA RIWAYAT",
+            font=("Arial", 10, "bold"),
+            bg="#991b1b",
+            fg="white",
+            width=30,
+            pady=8,
+            command=hapus_semua_riwayat
+        ).pack(pady=5)
 
     def buka_statistik_nilai():
         if not os.path.exists(FILE_RIWAYAT_NILAI):
