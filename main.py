@@ -678,7 +678,7 @@ def buat_jendela_utama():
                     newline="",
                     encoding="utf-8-sig"
                 ) as file:
-                    penulis = csv.writer(file)
+                    penulis = csv.writer(file, delimiter=";")
 
                     penulis.writerow([
                         "No",
@@ -814,6 +814,17 @@ def buat_jendela_utama():
             )
 
         perbarui_tampilan()
+
+        tk.Button(
+            jendela_riwayat,
+            text="EKSPOR HASIL KUIS KE CSV",
+            font=("Arial", 10, "bold"),
+            bg="#2563eb",
+            fg="white",
+            width=30,
+            pady=8,
+            command=ekspor_riwayat_csv
+        ).pack(pady=5)
 
         tk.Button(
             jendela_riwayat,
