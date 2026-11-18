@@ -1158,6 +1158,23 @@ def buat_jendela_utama():
             fg=WARNA_UTAMA
         ).pack(pady=12)
 
+        tk.Label(
+            halaman_progres,
+            text="REKOMENDASI BELAJAR",
+            font=("Arial", 12, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(pady=12)
+
+        tk.Label(
+            halaman_progres,
+            text=rekomendasi,
+            font=("Arial", 11),
+            bg=WARNA_BACKGROUND,
+            wraplength=430,
+            justify="center"
+        ).pack(pady=8)
+
     def keluar_aplikasi():
         konfirmasi = messagebox.askyesno(
             "Keluar", "Apakah kamu yakin ingin keluar dari aplikasi?"
