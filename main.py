@@ -1069,7 +1069,7 @@ def buat_jendela_utama():
         else:
             nilai_sebelumnya = None
 
-                # Menghitung persentase perubahan nilai
+        # Menghitung persentase perubahan nilai
         if nilai_sebelumnya is not None and nilai_sebelumnya > 0:
             perubahan = (
                 (nilai_terakhir - nilai_sebelumnya)
@@ -1077,6 +1077,16 @@ def buat_jendela_utama():
             ) * 100
         else:
             perubahan = None
+
+        # Menentukan status perkembangan nilai
+        if perubahan is None:
+            perkembangan = "Belum tersedia (perlu minimal 2 riwayat kuis)."
+        elif perubahan > 0:
+            perkembangan = f"Naik {perubahan:.2f}%"
+        elif perubahan < 0:
+            perkembangan = f"Turun {abs(perubahan):.2f}%"
+        else:
+            perkembangan = "Nilai tetap"
 
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
