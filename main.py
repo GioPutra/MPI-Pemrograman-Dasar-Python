@@ -1090,7 +1090,7 @@ def buat_jendela_utama():
 
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
-        halaman_progres.geometry("500x300")
+        halaman_progres.geometry("500x350")
         halaman_progres.configure(bg=WARNA_BACKGROUND)
 
         tk.Label(
@@ -1127,6 +1127,14 @@ def buat_jendela_utama():
             text=f"Rata-rata nilai: {rata_rata:.2f}",
             font=("Arial", 12),
             bg=WARNA_BACKGROUND
+        ).pack(pady=12)
+
+        tk.Label(
+            halaman_progres,
+            text=f"Perkembangan nilai: {perkembangan}",
+            font=("Arial", 12, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
         ).pack(pady=12)
 
     def keluar_aplikasi():
