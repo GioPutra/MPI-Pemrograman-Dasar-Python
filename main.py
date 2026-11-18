@@ -1089,7 +1089,13 @@ def buat_jendela_utama():
             perkembangan = "Nilai tetap"
 
         # Menentukan rekomendasi belajar otomatis
-        rekomendasi = "Terus tingkatkan pemahaman materi Python."
+        if nilai_terakhir < 50:
+            rekomendasi = (
+                "Pelajari kembali materi dasar Python "
+                "dan coba ulangi kuis tingkat Mudah."
+            )
+        else:
+            rekomendasi = "Terus tingkatkan pemahaman materi Python."
 
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
