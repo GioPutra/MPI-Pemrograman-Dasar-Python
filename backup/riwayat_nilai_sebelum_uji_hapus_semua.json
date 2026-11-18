@@ -1,0 +1,37 @@
+[
+    {
+        "tanggal": "16-11-2026 11:53:31",
+        "tingkat": "Menengah",
+        "skor": 3,
+        "total_soal": 10,
+        "nilai": 30
+    },
+    {
+        "tanggal": "16-11-2026 11:54:18",
+        "tingkat": "Sulit",
+        "skor": 2,
+        "total_soal": 10,
+        "nilai": 20
+    },
+    {
+        "tanggal": "16-11-2026 12:23:01",
+        "tingkat": "Menengah",
+        "skor": 6,
+        "total_soal": 10,
+        "nilai": 60
+    },
+    {
+        "tanggal": "16-11-2026 12:23:38",
+        "tingkat": "Menengah",
+        "skor": 6,
+        "total_soal": 10,
+        "nilai": 60
+    },
+    {
+        "tanggal": "16-11-2026 12:24:20",
+        "tingkat": "Menengah",
+        "skor": 4,
+        "total_soal": 10,
+        "nilai": 40
+    }
+]

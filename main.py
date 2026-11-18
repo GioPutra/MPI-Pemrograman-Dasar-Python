@@ -195,20 +195,11 @@ BANK_SOAL = {
 def buat_jendela_utama():
     jendela = tk.Tk()
     jendela.title(JUDUL_APLIKASI)
-    jendela.geometry("700x500")
+    jendela.geometry("1000x650")
+    jendela.minsize(900, 600)
     jendela.configure(bg=WARNA_BACKGROUND)
 
-    judul = tk.Label(
-        jendela, text="MPI PEMROGRAMAN DASAR PYTHON",
-        font=("Arial", 20, "bold"), bg=WARNA_BACKGROUND, fg=WARNA_UTAMA
-    )
-    judul.pack(pady=(40, 10))
-
-    deskripsi = tk.Label(
-        jendela, text="Media Pembelajaran Interaktif untuk Belajar Python",
-        font=("Arial", 11), bg=WARNA_BACKGROUND
-    )
-    deskripsi.pack(pady=(0, 25))
+    
 
     def tampilkan_materi(materi):
         halaman = tk.Toplevel(jendela)
@@ -1182,6 +1173,203 @@ def buat_jendela_utama():
         if konfirmasi:
             jendela.destroy()
 
+
+    # Kerangka dashboard utama
+    dashboard = tk.Frame(jendela, bg=WARNA_BACKGROUND)
+    dashboard.pack(fill="both", expand=True)
+
+    # Sidebar navigasi
+    sidebar = tk.Frame(
+        dashboard,
+        bg=WARNA_UTAMA,
+        width=230
+    )
+    sidebar.pack(side="left", fill="y")
+    sidebar.pack_propagate(False)
+
+    # Identitas aplikasi pada sidebar
+    tk.Label(
+        sidebar,
+        text="MPI LEARNING",
+        font=("Arial", 17, "bold"),
+        bg=WARNA_UTAMA,
+        fg="white"
+    ).pack(pady=(30, 5))
+
+    tk.Label(
+        sidebar,
+        text="PEMROGRAMAN PYTHON",
+        font=("Arial", 9),
+        bg=WARNA_UTAMA,
+        fg="#DCE8F7"
+    ).pack(pady=(0, 30))
+
+    # Area konten utama
+    area_konten = tk.Frame(
+        dashboard,
+        bg=WARNA_BACKGROUND
+    )
+    area_konten.pack(
+        side="left",
+        fill="both",
+        expand=True
+    )
+
+    # Identitas aplikasi
+    tk.Label(
+        area_konten,
+        text="MPI PEMROGRAMAN DASAR PYTHON",
+        font=("Arial", 18, "bold"),
+        bg=WARNA_BACKGROUND,
+        fg=WARNA_UTAMA
+    ).pack(anchor="w", padx=35, pady=(25, 5))
+
+    tk.Label(
+        area_konten,
+        text="Media Pembelajaran Interaktif untuk Belajar Python",
+        font=("Arial", 10),
+        bg=WARNA_BACKGROUND,
+        fg="#52657D"
+    ).pack(anchor="w", padx=35, pady=(0, 15))
+
+    # Judul halaman dashboard
+    tk.Label(
+        area_konten,
+        text="Selamat Datang!",
+        font=("Arial", 22, "bold"),
+        bg=WARNA_BACKGROUND,
+        fg=WARNA_UTAMA
+    ).pack(anchor="w", padx=35, pady=(35, 5))
+
+
+    # Area kartu informasi dashboard
+    area_kartu = tk.Frame(
+        area_konten,
+        bg=WARNA_BACKGROUND
+    )
+    area_kartu.pack(
+        fill="x",
+        padx=35,
+        pady=25
+    )
+
+    # Kartu Materi Pembelajaran
+    kartu_materi = tk.Frame(
+        area_kartu,
+        bg="white",
+        highlightbackground="#DCE5F0",
+        highlightthickness=1
+    )
+    kartu_materi.pack(
+        side="left",
+        fill="both",
+        expand=True,
+        padx=(0, 10),
+        ipady=20
+    )
+
+    tk.Label(
+        kartu_materi,
+        text="📚",
+        font=("Arial", 25),
+        bg="white"
+    ).pack(pady=(12, 0))
+
+    tk.Label(
+        kartu_materi,
+        text="MATERI",
+        font=("Arial", 11, "bold"),
+        bg="white",
+        fg="#52657D"
+    ).pack(pady=(15, 5))
+
+    tk.Label(
+        kartu_materi,
+        text="4 Materi",
+        font=("Arial", 19, "bold"),
+        bg="white",
+        fg=WARNA_UTAMA
+    ).pack(pady=(0, 15))
+
+    # Kartu Kuis
+    kartu_kuis = tk.Frame(
+        area_kartu,
+        bg="white",
+        highlightbackground="#DCE5F0",
+        highlightthickness=1
+    )
+    kartu_kuis.pack(
+        side="left",
+        fill="both",
+        expand=True,
+        padx=10,
+        ipady=20
+    )
+
+    # Ikon kartu kuis
+    tk.Label(
+        kartu_kuis,
+        text="✏️",
+        font=("Arial", 25),
+        bg="white"
+    ).pack(pady=(12, 0))
+
+    tk.Label(
+        kartu_kuis,
+        text="LATIHAN",
+        font=("Arial", 11, "bold"),
+        bg="white",
+        fg="#52657D"
+    ).pack(pady=(15, 5))
+
+    tk.Label(
+        kartu_kuis,
+        text="Kuis Python",
+        font=("Arial", 19, "bold"),
+        bg="white",
+        fg=WARNA_UTAMA
+    ).pack(pady=(0, 15))
+
+    # Kartu Progres Belajar
+    kartu_progres = tk.Frame(
+        area_kartu,
+        bg="white",
+        highlightbackground="#DCE5F0",
+        highlightthickness=1
+    )
+    kartu_progres.pack(
+        side="left",
+        fill="both",
+        expand=True,
+        padx=(10, 0),
+        ipady=20
+    )
+
+    # Ikon kartu progres
+    tk.Label(
+        kartu_progres,
+        text="📊",
+        font=("Arial", 25),
+        bg="white"
+    ).pack(pady=(12, 0))
+
+    tk.Label(
+        kartu_progres,
+        text="PROGRES",
+        font=("Arial", 11, "bold"),
+        bg="white",
+        fg="#52657D"
+    ).pack(pady=(15, 5))
+
+    tk.Label(
+        kartu_progres,
+        text="Belajar",
+        font=("Arial", 19, "bold"),
+        bg="white",
+        fg=WARNA_UTAMA
+    ).pack(pady=(0, 15))
+
+    # Daftar menu navigasi
     daftar_menu = [
         ("MATERI PEMBELAJARAN", buka_materi),
         ("KUIS", buka_kuis),
@@ -1195,10 +1383,19 @@ def buat_jendela_utama():
 
     for teks, fungsi in daftar_menu:
         tk.Button(
-            jendela, text=teks, font=("Arial", 11, "bold"),
-            bg=WARNA_UTAMA, fg="white", width=28, pady=9,
+            sidebar,
+            text=teks,
+            font=("Arial", 9, "bold"),
+            bg=WARNA_UTAMA,
+            fg="white",
+            activebackground="#2563A6",
+            activeforeground="white",
+            relief="flat",
+            anchor="w",
+            padx=18,
+            pady=12,
             command=fungsi
-        ).pack(pady=6)
+        ).pack(fill="x", padx=10, pady=3)
 
     return jendela
 
