@@ -1094,6 +1094,11 @@ def buat_jendela_utama():
                 "Pelajari kembali materi dasar Python "
                 "dan coba ulangi kuis tingkat Mudah."
             )
+        elif nilai_terakhir < 70:
+            rekomendasi = (
+                "Perbanyak latihan soal dan pahami "
+                "pembahasan jawaban."
+            )
         else:
             rekomendasi = "Terus tingkatkan pemahaman materi Python."
 
