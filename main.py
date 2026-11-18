@@ -1031,6 +1031,52 @@ def buat_jendela_utama():
             font=("Arial", 10)
         )
 
+    # Fungsi untuk menampilkan ringkasan progres belajar
+    def buka_ringkasan_progres():
+        if not os.path.exists(FILE_RIWAYAT_NILAI):
+            messagebox.showinfo(
+                "Progres Belajar",
+                "Belum ada riwayat nilai kuis."
+            )
+            return
+
+        try:
+            with open(FILE_RIWAYAT_NILAI, "r", encoding="utf-8") as file:
+                riwayat = json.load(file)
+        except (json.JSONDecodeError, OSError):
+            messagebox.showerror(
+                "Progres Belajar",
+                "Data riwayat nilai tidak dapat dibaca."
+            )
+            return
+
+        if not riwayat:
+            messagebox.showinfo(
+                "Progres Belajar",
+                "Belum ada data progres belajar."
+            )
+            return
+
+        halaman_progres = tk.Toplevel(jendela)
+        halaman_progres.title("Ringkasan Progres Belajar")
+        halaman_progres.geometry("500x300")
+        halaman_progres.configure(bg=WARNA_BACKGROUND)
+
+        tk.Label(
+            halaman_progres,
+            text="RINGKASAN PROGRES BELAJAR",
+            font=("Arial", 16, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(pady=25)
+
+        tk.Label(
+            halaman_progres,
+            text=f"Total kuis dikerjakan: {len(riwayat)}",
+            font=("Arial", 12),
+            bg=WARNA_BACKGROUND
+        ).pack(pady=12)
+
     def keluar_aplikasi():
         konfirmasi = messagebox.askyesno(
             "Keluar", "Apakah kamu yakin ingin keluar dari aplikasi?"
