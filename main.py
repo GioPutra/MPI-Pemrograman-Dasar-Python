@@ -1061,6 +1061,8 @@ def buat_jendela_utama():
 
         nilai_tertinggi = max(data.get("nilai", 0) for data in riwayat)
 
+        rata_rata = sum(data.get("nilai", 0) for data in riwayat) / len(riwayat)
+
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
         halaman_progres.geometry("500x300")
@@ -1091,6 +1093,13 @@ def buat_jendela_utama():
         tk.Label(
             halaman_progres,
             text=f"Nilai tertinggi: {nilai_tertinggi}",
+            font=("Arial", 12),
+            bg=WARNA_BACKGROUND
+        ).pack(pady=12)
+
+        tk.Label(
+            halaman_progres,
+            text=f"Rata-rata nilai: {rata_rata:.2f}",
             font=("Arial", 12),
             bg=WARNA_BACKGROUND
         ).pack(pady=12)
