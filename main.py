@@ -1063,6 +1063,12 @@ def buat_jendela_utama():
 
         rata_rata = sum(data.get("nilai", 0) for data in riwayat) / len(riwayat)
 
+        # Mengambil nilai kuis sebelumnya
+        if len(riwayat) >= 2:
+            nilai_sebelumnya = riwayat[-2].get("nilai", 0)
+        else:
+            nilai_sebelumnya = None
+
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
         halaman_progres.geometry("500x300")
