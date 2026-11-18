@@ -1088,6 +1088,9 @@ def buat_jendela_utama():
         else:
             perkembangan = "Nilai tetap"
 
+        # Menentukan rekomendasi belajar otomatis
+        rekomendasi = "Terus tingkatkan pemahaman materi Python."
+
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
         halaman_progres.geometry("500x350")
