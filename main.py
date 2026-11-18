@@ -1069,6 +1069,15 @@ def buat_jendela_utama():
         else:
             nilai_sebelumnya = None
 
+                # Menghitung persentase perubahan nilai
+        if nilai_sebelumnya is not None and nilai_sebelumnya > 0:
+            perubahan = (
+                (nilai_terakhir - nilai_sebelumnya)
+                / nilai_sebelumnya
+            ) * 100
+        else:
+            perubahan = None
+
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
         halaman_progres.geometry("500x300")
