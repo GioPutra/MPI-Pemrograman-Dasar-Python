@@ -1059,6 +1059,8 @@ def buat_jendela_utama():
 
         nilai_terakhir = riwayat[-1].get("nilai", 0)
 
+        nilai_tertinggi = max(data.get("nilai", 0) for data in riwayat)
+
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
         halaman_progres.geometry("500x300")
@@ -1082,6 +1084,13 @@ def buat_jendela_utama():
         tk.Label(
             halaman_progres,
             text=f"Nilai kuis terakhir: {nilai_terakhir}",
+            font=("Arial", 12),
+            bg=WARNA_BACKGROUND
+        ).pack(pady=12)
+
+        tk.Label(
+            halaman_progres,
+            text=f"Nilai tertinggi: {nilai_tertinggi}",
             font=("Arial", 12),
             bg=WARNA_BACKGROUND
         ).pack(pady=12)
