@@ -1105,8 +1105,10 @@ def buat_jendela_utama():
                 "kuis tingkat Sulit."
             )
         else:
-            rekomendasi = "Terus tingkatkan pemahaman materi Python."
-
+            rekomendasi = (
+                "Pertahankan prestasi dan perdalam "
+                "materi Python."
+            )
         halaman_progres = tk.Toplevel(jendela)
         halaman_progres.title("Ringkasan Progres Belajar")
         halaman_progres.geometry("500x350")
