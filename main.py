@@ -212,6 +212,20 @@ def buat_jendela_utama():
             bg=WARNA_BACKGROUND, fg=WARNA_UTAMA
         ).pack(pady=20)
 
+        # Tombol untuk kembali ke daftar materi
+        tk.Button(
+            halaman,
+            text="KEMBALI",
+            font=("Arial", 10, "bold"),
+            bg="#64748b",
+            fg="white",
+            activebackground="#475569",
+            activeforeground="white",
+            relief="flat",
+            cursor="hand2",
+            command=halaman.destroy
+        ).pack(pady=(5, 15))
+
         # Label bagian penjelasan materi
         tk.Label(
             halaman,
