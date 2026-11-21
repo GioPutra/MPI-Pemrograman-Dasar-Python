@@ -201,7 +201,8 @@ def buat_jendela_utama():
 
     
 
-    def tampilkan_materi(materi):
+    def tampilkan_materi(indeks_materi):
+        materi = DATA_MATERI[indeks_materi]
         halaman = tk.Toplevel(jendela)
         halaman.title(materi["judul"])
         halaman.geometry("650x550")
@@ -225,6 +226,54 @@ def buat_jendela_utama():
             cursor="hand2",
             command=halaman.destroy
         ).pack(pady=(5, 15))
+
+        # Indikator posisi materi
+        tk.Label(
+            halaman,
+            text=f"Materi {indeks_materi + 1} dari {len(DATA_MATERI)}",
+            font=("Arial", 10, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg="#52657D"
+        ).pack(pady=5)
+
+        # Area tombol navigasi materi
+        area_navigasi = tk.Frame(
+            halaman,
+            bg=WARNA_BACKGROUND
+        )
+        area_navigasi.pack(pady=5)
+
+        # Tombol materi sebelumnya
+        tk.Button(
+            area_navigasi,
+            text="◀ SEBELUMNYA",
+            font=("Arial", 9, "bold"),
+            bg=WARNA_UTAMA,
+            fg="white",
+            relief="flat",
+            cursor="hand2",
+            state="disabled" if indeks_materi == 0 else "normal",
+            command=lambda: (
+                halaman.destroy(),
+                tampilkan_materi(indeks_materi - 1)
+            )
+        ).pack(side="left", padx=5)
+
+        # Tombol materi berikutnya
+        tk.Button(
+            area_navigasi,
+            text="BERIKUTNYA ▶",
+            font=("Arial", 9, "bold"),
+            bg=WARNA_UTAMA,
+            fg="white",
+            relief="flat",
+            cursor="hand2",
+            state="disabled" if indeks_materi == len(DATA_MATERI) - 1 else "normal",
+            command=lambda: (
+                halaman.destroy(),
+                tampilkan_materi(indeks_materi + 1)
+            )
+        ).pack(side="left", padx=5)
 
         # Label bagian penjelasan materi
         tk.Label(
@@ -336,7 +385,7 @@ def buat_jendela_utama():
             justify="left"
         ).pack(anchor="w", padx=15, pady=(0, 12))
 
-        for materi in DATA_MATERI:
+        for indeks, materi in enumerate(DATA_MATERI):
             tombol_materi = tk.Button(
                 halaman_materi,
                 text=f"📘  {materi['judul']}     ➜",
@@ -351,7 +400,7 @@ def buat_jendela_utama():
                 anchor="w",
                 padx=15,
                 cursor="hand2",
-                command=lambda m=materi: tampilkan_materi(m)
+                command=lambda i=indeks: tampilkan_materi(i)
             )
             tombol_materi.pack(
                 fill="x",
