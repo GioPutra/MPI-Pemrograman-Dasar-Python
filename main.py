@@ -212,6 +212,15 @@ def buat_jendela_utama():
             bg=WARNA_BACKGROUND, fg=WARNA_UTAMA
         ).pack(pady=20)
 
+        # Label bagian penjelasan materi
+        tk.Label(
+            halaman,
+            text="RINGKASAN MATERI",
+            font=("Arial", 11, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(anchor="w", padx=30, pady=(10, 0))
+
         tk.Label(
             halaman, text=materi["isi"], font=("Arial", 11),
             bg=WARNA_BACKGROUND, justify="left", wraplength=570
