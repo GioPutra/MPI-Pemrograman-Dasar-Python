@@ -300,6 +300,15 @@ def buat_jendela_utama():
                 pady=5
             )
 
+        # Informasi jumlah materi
+        tk.Label(
+            halaman_materi,
+            text=f"Total tersedia: {len(DATA_MATERI)} materi pembelajaran",
+            font=("Arial", 9, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg="#52657D"
+        ).pack(pady=(12, 5))
+
     def buka_kuis():
         halaman_pilih = tk.Toplevel(jendela)
         halaman_pilih.title("Pilih Tingkat Kesulitan")
