@@ -246,12 +246,59 @@ def buat_jendela_utama():
             font=("Arial", 11), bg=WARNA_BACKGROUND
         ).pack(pady=10)
 
+        # Panel informasi materi
+        panel_informasi = tk.Frame(
+            halaman_materi,
+            bg="white",
+            highlightbackground="#DCE5F0",
+            highlightthickness=1
+        )
+        panel_informasi.pack(
+            fill="x",
+            padx=35,
+            pady=(8, 18)
+        )
+
+        tk.Label(
+            panel_informasi,
+            text="MULAI BELAJAR PYTHON",
+            font=("Arial", 11, "bold"),
+            bg="white",
+            fg=WARNA_UTAMA
+        ).pack(anchor="w", padx=15, pady=(12, 5))
+
+        tk.Label(
+            panel_informasi,
+            text="Pilih salah satu materi untuk memahami dasar-dasar Python secara bertahap.",
+            font=("Arial", 9),
+            bg="white",
+            fg="#52657D",
+            wraplength=480,
+            justify="left"
+        ).pack(anchor="w", padx=15, pady=(0, 12))
+
         for materi in DATA_MATERI:
-            tk.Button(
-                halaman_materi, text=materi["judul"], font=("Arial", 12),
-                bg="white", fg=WARNA_UTAMA, width=35, pady=10,
+            tombol_materi = tk.Button(
+                halaman_materi,
+                text=f"📘  {materi['judul']}     ➜",
+                font=("Arial", 11, "bold"),
+                bg="white",
+                fg=WARNA_UTAMA,
+                activebackground="#E8F0FA",
+                activeforeground=WARNA_UTAMA,
+                width=48,
+                pady=12,
+                relief="flat",
+                anchor="w",
+                padx=15,
+                cursor="hand2",
                 command=lambda m=materi: tampilkan_materi(m)
-            ).pack(pady=6)
+            )
+            tombol_materi.pack(
+                fill="x",
+                padx=35,
+                pady=5
+            )
 
     def buka_kuis():
         halaman_pilih = tk.Toplevel(jendela)
