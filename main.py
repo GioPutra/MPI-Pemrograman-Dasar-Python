@@ -235,16 +235,20 @@ def buat_jendela_utama():
             fg=WARNA_UTAMA
         ).pack(anchor="w", padx=25, pady=(15, 5))
 
-        tk.Label(
-            halaman, text="Contoh Kode Python:", font=("Arial", 12, "bold"),
-            bg=WARNA_BACKGROUND, fg=WARNA_UTAMA
-        ).pack(pady=(15, 5))
+        # Area pembungkus contoh kode
+        area_kode = tk.Frame(
+            halaman,
+            bg="#1e293b",
+            padx=12,
+            pady=12
+        )
+        area_kode.pack(padx=25, pady=8, fill="x")
 
         kotak_kode = tk.Text(
-            halaman, height=8, width=65, font=("Consolas", 11),
+            area_kode, height=8, width=65, font=("Consolas", 11),
             bg="#e2e8f0", fg="#172554", relief="flat", padx=10, pady=10
         )
-        kotak_kode.pack(padx=25, pady=5)
+        kotak_kode.pack(fill="x")
         kotak_kode.insert("1.0", materi["contoh"])
         kotak_kode.configure(state="disabled")
 
