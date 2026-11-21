@@ -275,6 +275,20 @@ def buat_jendela_utama():
             )
         ).pack(side="left", padx=5)
 
+        # Tombol menuju latihan kuis
+        tk.Button(
+            halaman,
+            text="LATIHAN MATERI",
+            font=("Arial", 10, "bold"),
+            bg="#2563A6",
+            fg="white",
+            activebackground="#1D4F91",
+            activeforeground="white",
+            relief="flat",
+            cursor="hand2",
+            command=buka_kuis
+        ).pack(pady=10)
+
         # Label bagian penjelasan materi
         tk.Label(
             halaman,
