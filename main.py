@@ -1369,6 +1369,83 @@ def buat_jendela_utama():
         fg=WARNA_UTAMA
     ).pack(pady=(0, 15))
 
+    # Area informasi aktivitas belajar
+    area_informasi = tk.Frame(
+        area_konten,
+        bg="white",
+        highlightbackground="#DCE5F0",
+        highlightthickness=1
+    )
+    area_informasi.pack(
+        fill="x",
+        padx=35,
+        pady=(5, 20)
+    )
+
+    # Judul informasi aktivitas
+    tk.Label(
+        area_informasi,
+        text="AKTIVITAS PEMBELAJARAN",
+        font=("Arial", 13, "bold"),
+        bg="white",
+        fg=WARNA_UTAMA
+    ).pack(anchor="w", padx=20, pady=(15, 8))
+
+    # Deskripsi aktivitas
+    tk.Label(
+        area_informasi,
+        text="Mulai perjalanan belajarmu dengan mempelajari materi Python, "
+             "mengerjakan kuis, dan melihat perkembangan nilai.",
+        font=("Arial", 10),
+        bg="white",
+        fg="#52657D",
+        wraplength=650,
+        justify="left"
+    ).pack(anchor="w", padx=20, pady=(0, 15))
+
+    # Area tombol akses cepats
+    area_tombol_akses = tk.Frame(
+        area_informasi,
+        bg="white"
+    )
+    area_tombol_akses.pack(
+        anchor="w",
+        padx=20,
+        pady=(0, 18)
+    )
+
+    # Tombol menuju materi pembelajaran
+    tk.Button(
+        area_tombol_akses,
+        text="BUKA MATERI",
+        font=("Arial", 10, "bold"),
+        bg=WARNA_UTAMA,
+        fg="white",
+        activebackground="#2563A6",
+        activeforeground="white",
+        relief="flat",
+        padx=18,
+        pady=10,
+        cursor="hand2",
+        command=buka_materi
+    ).pack(side="left", padx=(0, 10))
+
+    # Tombol menuju kuis
+    tk.Button(
+        area_tombol_akses,
+        text="MULAI KUIS",
+        font=("Arial", 10, "bold"),
+        bg="#E8F0FA",
+        fg=WARNA_UTAMA,
+        activebackground="#D5E4F5",
+        activeforeground=WARNA_UTAMA,
+        relief="flat",
+        padx=18,
+        pady=10,
+        cursor="hand2",
+        command=buka_kuis
+    ).pack(side="left")
+
     # Daftar menu navigasi
     daftar_menu = [
         ("MATERI PEMBELAJARAN", buka_materi),
