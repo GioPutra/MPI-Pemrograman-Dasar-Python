@@ -226,6 +226,15 @@ def buat_jendela_utama():
             bg=WARNA_BACKGROUND, justify="left", wraplength=570
         ).pack(padx=30, pady=10, anchor="w")
 
+        # Label bagian contoh kode
+        tk.Label(
+            halaman,
+            text="CONTOH PROGRAM PYTHON",
+            font=("Arial", 11, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(anchor="w", padx=25, pady=(15, 5))
+
         tk.Label(
             halaman, text="Contoh Kode Python:", font=("Arial", 12, "bold"),
             bg=WARNA_BACKGROUND, fg=WARNA_UTAMA
