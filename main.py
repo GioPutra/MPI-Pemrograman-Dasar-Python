@@ -252,6 +252,29 @@ def buat_jendela_utama():
         kotak_kode.insert("1.0", materi["contoh"])
         kotak_kode.configure(state="disabled")
 
+        # Fungsi untuk menyalin contoh kode
+        def salin_kode():
+            halaman.clipboard_clear()
+            halaman.clipboard_append(materi["contoh"])
+            messagebox.showinfo(
+                "Berhasil",
+                "Contoh kode Python berhasil disalin!"
+            )
+
+        # Tombol untuk menyalin contoh kode
+        tk.Button(
+            halaman,
+            text="SALIN KODE",
+            font=("Arial", 10, "bold"),
+            bg=WARNA_UTAMA,
+            fg="white",
+            activebackground="#244a75",
+            activeforeground="white",
+            relief="flat",
+            cursor="hand2",
+            command=salin_kode
+        ).pack(pady=(10, 20))
+
     def buka_materi():
         halaman_materi = tk.Toplevel(jendela)
         halaman_materi.title("Materi Pembelajaran")
