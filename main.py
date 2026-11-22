@@ -1853,7 +1853,7 @@ def buat_jendela_utama():
 
     tk.Label(
         kartu_kuis,
-        text="Kuis Python",
+        text="Latihan Pemrograman",
         font=("Arial", 19, "bold"),
         bg="white",
         fg=WARNA_UTAMA
