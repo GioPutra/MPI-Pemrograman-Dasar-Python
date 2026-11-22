@@ -504,6 +504,27 @@ def buat_jendela_utama():
             font=("Arial", 11), bg=WARNA_BACKGROUND
         ).pack(pady=10)
 
+        # Kolom pencarian materi
+        tk.Label(
+            halaman_materi,
+            text="Cari Materi:",
+            font=("Arial", 10, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(anchor="w", padx=35, pady=(5, 3))
+
+        input_pencarian = tk.Entry(
+            halaman_materi,
+            font=("Arial", 11),
+            relief="solid",
+            bd=1
+        )
+        input_pencarian.pack(
+            fill="x",
+            padx=35,
+            ipady=7
+        )
+
         # Panel informasi materi
         panel_informasi = tk.Frame(
             halaman_materi,
@@ -535,28 +556,61 @@ def buat_jendela_utama():
             justify="left"
         ).pack(anchor="w", padx=15, pady=(0, 12))
 
-        for indeks, materi in enumerate(DATA_MATERI):
-            tombol_materi = tk.Button(
-                halaman_materi,
-                text=f"📘  {materi['judul']}     ➜",
-                font=("Arial", 11, "bold"),
-                bg="white",
-                fg=WARNA_UTAMA,
-                activebackground="#E8F0FA",
-                activeforeground=WARNA_UTAMA,
-                width=48,
-                pady=12,
-                relief="flat",
-                anchor="w",
-                padx=15,
-                cursor="hand2",
-                command=lambda i=indeks: tampilkan_materi(i)
-            )
-            tombol_materi.pack(
-                fill="x",
-                padx=35,
-                pady=5
-            )
+        def tampilkan_daftar_materi():
+            kata_kunci = input_pencarian.get().lower().strip()
+
+            for widget in daftar_tombol_materi.winfo_children():
+                widget.destroy()
+
+            jumlah_ditemukan = 0
+
+            for indeks, materi in enumerate(DATA_MATERI):
+                if kata_kunci in materi["judul"].lower():
+                    jumlah_ditemukan += 1
+
+                    tombol_materi = tk.Button(
+                        daftar_tombol_materi,
+                        text=f"📘  {materi['judul']}     ➜",
+                        font=("Arial", 11, "bold"),
+                        bg="white",
+                        fg=WARNA_UTAMA,
+                        activebackground="#E8F0FA",
+                        activeforeground=WARNA_UTAMA,
+                        width=48,
+                        pady=12,
+                        relief="flat",
+                        anchor="w",
+                        padx=15,
+                        cursor="hand2",
+                        command=lambda i=indeks: tampilkan_materi(i)
+                    )
+                    tombol_materi.pack(
+                        fill="x",
+                        padx=5,
+                        pady=5
+                    )
+
+            if jumlah_ditemukan == 0:
+                tk.Label(
+                    daftar_tombol_materi,
+                    text="Materi tidak ditemukan.",
+                    font=("Arial", 10),
+                    bg=WARNA_BACKGROUND,
+                    fg="#52657D"
+                ).pack(pady=15)
+
+        daftar_tombol_materi = tk.Frame(
+            halaman_materi,
+            bg=WARNA_BACKGROUND
+        )
+        daftar_tombol_materi.pack(fill="x", padx=30)
+
+        tampilkan_daftar_materi()
+
+        input_pencarian.bind(
+            "<KeyRelease>",
+            lambda event: tampilkan_daftar_materi()
+        )
 
         # Informasi jumlah materi
         tk.Label(
@@ -711,6 +765,8 @@ def buat_jendela_utama():
 
             for widget in area_pilihan.winfo_children():
                 widget.destroy()
+
+                print("JUMLAH TOMBOL SEBELUM PENCARIAN:", len(daftar_tombol_materi.winfo_children()))
 
             for indeks, pilihan in enumerate(data["pilihan"]):
                 tk.Radiobutton(
