@@ -16,6 +16,49 @@ FILE_RIWAYAT_NILAI = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "riwayat_nilai.json"
 )
+
+# Lokasi file untuk menyimpan profil pengguna
+FILE_PROFIL_PENGGUNA = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "profil_pengguna.json"
+)
+
+# Fungsi untuk menyimpan profil pengguna
+def simpan_profil_pengguna(nama, kelas, jurusan):
+    data_profil = {
+        "nama": nama,
+        "kelas": kelas,
+        "jurusan": jurusan
+    }
+
+    try:
+        with open(FILE_PROFIL_PENGGUNA, "w", encoding="utf-8") as file:
+            json.dump(
+                data_profil,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+        return True
+
+    except OSError:
+        messagebox.showerror(
+            "Profil Pengguna",
+            "Profil gagal disimpan."
+        )
+        return False
+
+# Fungsi untuk membaca profil pengguna
+def baca_profil_pengguna():
+    if not os.path.exists(FILE_PROFIL_PENGGUNA):
+        return None
+
+    try:
+        with open(FILE_PROFIL_PENGGUNA, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+    except (json.JSONDecodeError, OSError):
+        return None
 # Fungsi untuk menyimpan riwayat nilai kuis
 def simpan_riwayat_nilai(
     tingkat, skor, nilai, total_soal=None, materi=None
@@ -878,6 +921,84 @@ def buat_jendela_utama():
             "pembelajaran interaktif untuk mempelajari dasar Python."
         )
     # Fungsi untuk menampilkan riwayat nilai kuis
+
+    # Fungsi untuk menampilkan profil pengguna
+    def buka_profil_pengguna():
+        halaman_profil = tk.Toplevel(jendela)
+        halaman_profil.title("Profil Pengguna")
+        halaman_profil.geometry("450x400")
+        halaman_profil.configure(bg=WARNA_BACKGROUND)
+
+        profil = baca_profil_pengguna() or {}
+
+        tk.Label(
+            halaman_profil,
+            text="PROFIL PENGGUNA",
+            font=("Arial", 17, "bold"),
+            bg=WARNA_BACKGROUND,
+            fg=WARNA_UTAMA
+        ).pack(pady=20)
+
+        tk.Label(
+            halaman_profil,
+            text="Nama Lengkap",
+            bg=WARNA_BACKGROUND
+        ).pack()
+
+        input_nama = tk.Entry(halaman_profil, width=35)
+        input_nama.pack(pady=5)
+        input_nama.insert(0, profil.get("nama", ""))
+
+        tk.Label(
+            halaman_profil,
+            text="Kelas",
+            bg=WARNA_BACKGROUND
+        ).pack()
+
+        input_kelas = tk.Entry(halaman_profil, width=35)
+        input_kelas.pack(pady=5)
+        input_kelas.insert(0, profil.get("kelas", ""))
+
+        tk.Label(
+            halaman_profil,
+            text="Jurusan",
+            bg=WARNA_BACKGROUND
+        ).pack()
+
+        input_jurusan = tk.Entry(halaman_profil, width=35)
+        input_jurusan.pack(pady=5)
+        input_jurusan.insert(0, profil.get("jurusan", ""))
+
+        def simpan_data_profil():
+            nama = input_nama.get().strip()
+            kelas = input_kelas.get().strip()
+            jurusan = input_jurusan.get().strip()
+
+            if not nama or not kelas or not jurusan:
+                messagebox.showwarning(
+                    "Profil Pengguna",
+                    "Semua kolom harus diisi."
+                )
+                return
+
+            if simpan_profil_pengguna(nama, kelas, jurusan):
+                messagebox.showinfo(
+                    "Profil Pengguna",
+                    "Profil berhasil disimpan."
+                )
+                halaman_profil.destroy()
+
+        tk.Button(
+            halaman_profil,
+            text="SIMPAN PROFIL",
+            command=simpan_data_profil,
+            bg=WARNA_UTAMA,
+            fg="white",
+            font=("Arial", 10, "bold"),
+            relief="flat",
+            padx=20,
+            pady=10
+        ).pack(pady=20)
     
     # Fungsi untuk menampilkan dan menghapus riwayat nilai kuis
     def buka_riwayat_nilai():
@@ -1803,6 +1924,7 @@ def buat_jendela_utama():
         ("MATERI PEMBELAJARAN", buka_materi),
         ("KUIS", buka_kuis),
         ("TENTANG APLIKASI", buka_tentang),
+        ("PROFIL PENGGUNA", buka_profil_pengguna),
         ("RIWAYAT NILAI", buka_riwayat_nilai),
         ("STATISTIK NILAI", buka_statistik_nilai),
         ("GRAFIK PERKEMBANGAN NILAI", buka_grafik_nilai),
