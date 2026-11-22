@@ -1814,7 +1814,7 @@ def buat_jendela_utama():
 
     tk.Label(
         kartu_materi,
-        text="4 Materi",
+        text=f"{len(DATA_MATERI)} Materi",
         font=("Arial", 19, "bold"),
         bg="white",
         fg=WARNA_UTAMA
@@ -1892,7 +1892,7 @@ def buat_jendela_utama():
 
     tk.Label(
         kartu_progres,
-        text="Belajar",
+        text="Pantau Kemajuan",
         font=("Arial", 19, "bold"),
         bg="white",
         fg=WARNA_UTAMA
