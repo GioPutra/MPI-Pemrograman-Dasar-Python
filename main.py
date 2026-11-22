@@ -17,7 +17,9 @@ FILE_RIWAYAT_NILAI = os.path.join(
     "riwayat_nilai.json"
 )
 # Fungsi untuk menyimpan riwayat nilai kuis
-def simpan_riwayat_nilai(tingkat, skor, nilai):
+def simpan_riwayat_nilai(
+    tingkat, skor, nilai, total_soal=None, materi=None
+):
     riwayat = []
 
     if os.path.exists(FILE_RIWAYAT_NILAI):
@@ -27,11 +29,15 @@ def simpan_riwayat_nilai(tingkat, skor, nilai):
         except (json.JSONDecodeError, OSError):
             riwayat = []
 
+    if total_soal is None:
+        total_soal = JUMLAH_SOAL_KUIS
+
     data_nilai = {
         "tanggal": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
         "tingkat": tingkat,
+        "materi": materi if materi else "-",
         "skor": skor,
-        "total_soal": JUMLAH_SOAL_KUIS,
+        "total_soal": total_soal,
         "nilai": nilai
     }
 
@@ -111,21 +117,34 @@ DATA_MATERI = [
 ]
 
 
-def buat_soal(soal, pilihan, jawaban, pembahasan=""):
-    """Membuat satu data soal beserta pembahasannya."""
+def buat_soal(soal, pilihan, jawaban, pembahasan="", materi=""):
+    """Membuat satu data soal beserta pembahasan dan kategori materinya."""
     return {
         "soal": soal,
         "pilihan": pilihan,
         "jawaban": jawaban,
-        "pembahasan": pembahasan
+        "pembahasan": pembahasan,
+        "materi": materi
     }
 
 
 # Setiap tingkat memiliki 20 soal. Total tetap 60 soal.
 BANK_SOAL = {
     "Mudah": [
-        buat_soal("Python termasuk jenis ...", ["Bahasa pemrograman", "Perangkat keras", "Sistem operasi", "Jaringan komputer"], 0, "Python adalah bahasa pemrograman, yaitu bahasa yang digunakan untuk memberikan instruksi kepada komputer."),
-        buat_soal("Siapa pengembang Python?", ["Bill Gates", "Guido van Rossum", "Steve Jobs", "Mark Zuckerberg"], 1, "Python dikembangkan oleh Guido van Rossum dan pertama kali dirilis pada tahun 1991."),
+        buat_soal(
+    "Python termasuk jenis ...",
+    ["Bahasa pemrograman", "Perangkat keras", "Sistem operasi", "Jaringan komputer"],
+    0,
+    "Python adalah bahasa pemrograman, yaitu bahasa yang digunakan untuk memberikan instruksi kepada komputer.",
+    "Pengenalan Python"
+),
+        buat_soal(
+    "Siapa pengembang Python?",
+    ["Bill Gates", "Guido van Rossum", "Steve Jobs", "Mark Zuckerberg"],
+    1,
+    "Python dikembangkan oleh Guido van Rossum dan pertama kali dirilis pada tahun 1991.",
+    "Pengenalan Python"
+),
         buat_soal("Pada tahun berapa Python pertama kali dirilis?", ["1980", "1985", "1991", "2000"], 2, "Python pertama kali dirilis pada tahun 1991."),
         buat_soal("Perintah untuk menampilkan teks adalah ...", ["input()", "show()", "print()", "write()"], 2, "Fungsi print() digunakan untuk menampilkan teks atau nilai ke layar."),
         buat_soal("Variabel digunakan untuk ...", ["Menyimpan data", "Mematikan komputer", "Menghapus aplikasi", "Menggambar"], 0, "Variabel merupakan tempat untuk menyimpan data agar dapat digunakan kembali dalam program."),
@@ -190,6 +209,80 @@ BANK_SOAL = {
         buat_soal("Apa keluaran dari x = 20; x = x % 6; print(x * 2)?", ["4", "8", "12", "14"], 0, "20 % 6 menghasilkan sisa 2. Kemudian 2 * 2 = 4. Jadi jawaban yang benar adalah 4.")
     ]
 }
+
+# Mengelompokkan soal berdasarkan materi pembelajaran
+KATEGORI_SOAL = {
+    "Mudah": {
+        "Pengenalan Python": [0, 1, 2, 3],
+        "Variabel": [4, 5],
+        "Tipe Data": [6, 7, 8, 9, 17, 18, 19],
+        "Operator Dasar": [10, 11, 12, 13, 14, 15, 16]
+    },
+    "Menengah": {
+        "Pengenalan Python": [],
+        "Variabel": [5, 6, 12, 13, 14, 19],
+        "Tipe Data": [7, 8, 9, 16],
+        "Operator Dasar": [0, 1, 2, 3, 4, 10, 11, 15, 17, 18]
+    },
+    "Sulit": {
+        "Pengenalan Python": [],
+        "Variabel": [1, 9],
+        "Tipe Data": [5, 6, 12, 15, 16],
+        "Operator Dasar": [0, 2, 3, 4, 7, 8, 10, 11, 13, 14, 17, 18, 19]
+    }
+}
+
+# Memasukkan kategori ke setiap soal
+for tingkat, daftar_kategori in KATEGORI_SOAL.items():
+    for nama_materi, daftar_indeks in daftar_kategori.items():
+        for indeks in daftar_indeks:
+            BANK_SOAL[tingkat][indeks]["materi"] = nama_materi
+
+# Tambahan soal untuk materi Pengenalan Python
+BANK_SOAL["Mudah"].extend([
+    buat_soal(
+        "Python dikenal sebagai bahasa pemrograman yang ...",
+        ["Sulit dipahami", "Mudah dipelajari", "Hanya untuk jaringan", "Tidak bisa digunakan membuat aplikasi"],
+        1,
+        "Python memiliki sintaks yang sederhana sehingga relatif mudah dipelajari.",
+        "Pengenalan Python"
+    ),
+    buat_soal(
+        "Ekstensi file yang umum digunakan untuk program Python adalah ...",
+        [".html", ".css", ".py", ".jpg"],
+        2,
+        "File program Python umumnya menggunakan ekstensi .py.",
+        "Pengenalan Python"
+    ),
+    buat_soal(
+        "Perintah print('Belajar Python') digunakan untuk ...",
+        ["Menerima input", "Menampilkan teks", "Menghapus variabel", "Menghentikan komputer"],
+        1,
+        "Fungsi print() digunakan untuk menampilkan teks atau nilai.",
+        "Pengenalan Python"
+    ),
+    buat_soal(
+        "Python pertama kali dirilis pada dekade ...",
+        ["1970-an", "1980-an", "1990-an", "2000-an"],
+        2,
+        "Python pertama kali dirilis pada tahun 1991.",
+        "Pengenalan Python"
+    ),
+    buat_soal(
+        "Salah satu kegunaan Python adalah ...",
+        ["Membuat aplikasi", "Mengganti perangkat keras", "Memperbaiki layar secara fisik", "Mengisi daya komputer"],
+        0,
+        "Python dapat digunakan untuk membuat berbagai aplikasi dan mengolah data.",
+        "Pengenalan Python"
+    ),
+    buat_soal(
+        "Bahasa Python dikembangkan oleh ...",
+        ["Guido van Rossum", "Dennis Ritchie", "James Gosling", "Linus Torvalds"],
+        0,
+        "Guido van Rossum merupakan pengembang bahasa pemrograman Python.",
+        "Pengenalan Python"
+    )
+])
 
 
 def buat_jendela_utama():
@@ -286,7 +379,7 @@ def buat_jendela_utama():
             activeforeground="white",
             relief="flat",
             cursor="hand2",
-            command=buka_kuis
+            command=lambda: buka_kuis(materi["judul"].split(". ", 1)[1])
         ).pack(pady=10)
 
         # Label bagian penjelasan materi
@@ -431,7 +524,47 @@ def buat_jendela_utama():
             fg="#52657D"
         ).pack(pady=(12, 5))
 
-    def buka_kuis():
+    def buka_kuis(nama_materi=None):
+        if nama_materi:
+            nama_materi = {
+                "Variabel dalam Python": "Variabel",
+                "Tipe Data Python": "Tipe Data",
+                "Operator Dasar Python": "Operator Dasar"
+            }.get(nama_materi, nama_materi)
+
+            soal_materi = [
+                soal
+                for daftar_soal in BANK_SOAL.values()
+                for soal in daftar_soal
+                if soal.get("materi") == nama_materi
+            ]
+
+            if not soal_materi:
+                messagebox.showinfo(
+                    "Soal Belum Tersedia",
+                    f"Soal untuk materi {nama_materi} belum tersedia."
+                )
+                return
+
+            if len(soal_materi) < JUMLAH_SOAL_KUIS:
+                messagebox.showwarning(
+                    "Soal Belum Mencukupi",
+                    f"Materi {nama_materi} hanya memiliki "
+                    f"{len(soal_materi)} soal. Minimal diperlukan "
+                    f"{JUMLAH_SOAL_KUIS} soal."
+                )
+                return
+
+            jumlah = JUMLAH_SOAL_KUIS
+            soal_acak = random.sample(soal_materi, jumlah)
+
+            jalankan_kuis(
+                "Materi",
+                soal_acak,
+                nama_materi=nama_materi
+            )
+            return
+
         halaman_pilih = tk.Toplevel(jendela)
         halaman_pilih.title("Pilih Tingkat Kesulitan")
         halaman_pilih.geometry("500x400")
@@ -464,7 +597,7 @@ def buat_jendela_utama():
                 command=lambda t=tingkat: mulai_kuis(t)
             ).pack(pady=8)
 
-    def jalankan_kuis(tingkat, soal_terpilih=None):
+    def jalankan_kuis(tingkat, soal_terpilih=None, nama_materi=None):
         halaman_kuis = tk.Toplevel(jendela)
         halaman_kuis.title(f"Kuis Python - {tingkat}")
         halaman_kuis.geometry("700x620")
@@ -472,6 +605,8 @@ def buat_jendela_utama():
 
         if soal_terpilih is None:
             soal_terpilih = random.sample(BANK_SOAL[tingkat], JUMLAH_SOAL_KUIS)
+
+        jumlah_soal_aktif = len(soal_terpilih)
 
         nomor_soal = 0
         skor = 0
@@ -527,7 +662,7 @@ def buat_jendela_utama():
             data = soal_terpilih[nomor_soal]
 
             label_nomor.config(
-                text=f"Soal {nomor_soal + 1} dari {JUMLAH_SOAL_KUIS}"
+                text=f"Soal {nomor_soal + 1} dari {jumlah_soal_aktif}"
             )
             label_soal.config(text=data["soal"])
 
@@ -545,7 +680,10 @@ def buat_jendela_utama():
             label_status.config(text="")
             label_pembahasan.config(text="")
             area_pembahasan.pack_forget()
-            tombol_lanjut.config(text="PERIKSA JAWABAN")
+            tombol_lanjut.config(
+                text="LIHAT HASIL" if nomor_soal == jumlah_soal_aktif - 1
+                else "SOAL BERIKUTNYA"
+            )
 
         def lanjut_soal():
             nonlocal nomor_soal, skor, sudah_menjawab
@@ -588,12 +726,12 @@ def buat_jendela_utama():
                 )
                 sudah_menjawab = True
                 tombol_lanjut.config(
-                    text="LIHAT HASIL" if nomor_soal == JUMLAH_SOAL_KUIS - 1
+                    text="LIHAT HASIL" if nomor_soal == jumlah_soal_aktif - 1
                     else "SOAL BERIKUTNYA"
                 )
                 return
 
-            if nomor_soal < JUMLAH_SOAL_KUIS - 1:
+            if nomor_soal < jumlah_soal_aktif - 1:
                 nomor_soal += 1
                 tampilkan_soal()
             else:
@@ -603,8 +741,14 @@ def buat_jendela_utama():
             for widget in halaman_kuis.winfo_children():
                 widget.destroy()
 
-            nilai = int((skor / JUMLAH_SOAL_KUIS) * 100)
-            simpan_riwayat_nilai(tingkat, skor, nilai)
+            nilai = int((skor / jumlah_soal_aktif) * 100)
+            simpan_riwayat_nilai(
+                tingkat,
+                skor,
+                nilai,
+                total_soal=jumlah_soal_aktif,
+                materi=nama_materi
+            )
             tk.Label(
                 halaman_kuis, text="HASIL KUIS",
                 font=("Arial", 22, "bold"), bg=WARNA_BACKGROUND,
@@ -618,7 +762,7 @@ def buat_jendela_utama():
 
             tk.Label(
                 halaman_kuis,
-                text=f"Jawaban benar: {skor} dari {JUMLAH_SOAL_KUIS} soal",
+                text=f"Jawaban benar: {skor} dari {jumlah_soal_aktif} soal",
                 font=("Arial", 14), bg=WARNA_BACKGROUND
             ).pack(pady=8)
 
@@ -646,32 +790,62 @@ def buat_jendela_utama():
 
             def ulangi_soal_sama():
                 halaman_kuis.destroy()
-                jalankan_kuis(tingkat, soal_terpilih)
+                jalankan_kuis(
+                    tingkat,
+                    soal_terpilih,
+                    nama_materi=nama_materi
+                )
 
             def coba_soal_berbeda():
-                halaman_kuis.destroy()
-                soal_lama = {item["soal"] for item in soal_terpilih}
+                if nama_materi:
+                    soal_pool = [
+                        item
+                        for daftar_soal in BANK_SOAL.values()
+                        for item in daftar_soal
+                        if item.get("materi") == nama_materi
+                    ]
+                else:
+                    soal_pool = BANK_SOAL[tingkat]
+
+                soal_lama = {
+                    item["soal"] for item in soal_terpilih
+                }
+
                 soal_tersedia = [
-                    item for item in BANK_SOAL[tingkat]
+                    item for item in soal_pool
                     if item["soal"] not in soal_lama
                 ]
 
-                if len(soal_tersedia) < JUMLAH_SOAL_KUIS:
-                    messagebox.showinfo(
-                        "Informasi",
-                        "Tidak tersedia cukup soal baru. Kuis akan "
-                        "menggunakan kembali bank soal dengan kombinasi acak.",
-                        parent=jendela
-                    )
+                if len(soal_tersedia) >= jumlah_soal_aktif:
                     soal_baru = random.sample(
-                        BANK_SOAL[tingkat], JUMLAH_SOAL_KUIS
+                        soal_tersedia,
+                        jumlah_soal_aktif
                     )
                 else:
-                    soal_baru = random.sample(
-                        soal_tersedia, JUMLAH_SOAL_KUIS
+                    messagebox.showinfo(
+                        "Informasi",
+                        "Soal baru tidak mencukupi. "
+                        "Beberapa soal mungkin akan muncul kembali.",
+                        parent=halaman_kuis
                     )
 
-                jalankan_kuis(tingkat, soal_baru)
+                    jumlah_baru = min(
+                        jumlah_soal_aktif,
+                        len(soal_pool)
+                    )
+
+                    soal_baru = random.sample(
+                        soal_pool,
+                        jumlah_baru
+                    )
+
+                halaman_kuis.destroy()
+
+                jalankan_kuis(
+                    tingkat,
+                    soal_baru,
+                    nama_materi=nama_materi
+                )
 
             tk.Button(
                 halaman_kuis, text="ULANGI SOAL YANG SAMA",
